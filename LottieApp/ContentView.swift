@@ -8,12 +8,32 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var isActive = false
+    @State var isFirst = false
     var body: some View {
-        ZStack {
-            LottieView(name: "Animation")
-            Text("いってらっしゃい")
+        NavigationStack {
+            if isFirst {
+                VStack {
+                    Button(action: {
+                        isActive = true
+                    }) {
+                        Text("A")
+                    }
+                }
+            } else {
+                LottieView(name: "Animation2")
+            }
         }
-        
+        .sheet(isPresented: $isActive) {
+            SecoundView()
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.3) {
+                withAnimation {
+                    self.isFirst = true
+                }
+            }
+        }
     }
 }
 
